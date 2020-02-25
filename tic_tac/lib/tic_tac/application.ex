@@ -7,7 +7,8 @@ defmodule TicTac.Application do
 
   def start(_type, _args) do
     children = [
-      {DynamicSupervisor, name: TicTac}
+      {Registry, keys: :unique, name: TicTac.Registry}
+      {DynamicSupervisor, name: TicTac.WorkerSupervisor, strategy: :one_for_one}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

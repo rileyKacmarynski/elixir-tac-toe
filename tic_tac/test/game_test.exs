@@ -1,4 +1,4 @@
-defmodule TicTacTest do
+defmodule GameTest do
   use ExUnit.Case
   doctest TicTac
 
