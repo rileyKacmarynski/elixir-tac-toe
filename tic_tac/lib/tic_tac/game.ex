@@ -13,18 +13,18 @@ defmodule TicTac.Game do
     }
   )
 
-  def new_game() do
+  @doc """
+
+  """
+  def new_game(game_id, {p1_id, p2_id}) do
     %TicTac.Game{
-      id: UUID.uuid1(),
+      id: game_id,
       turn: pick_first()
     }
   end
 
-  defp pick_first() do
-    case :rand.uniform(2) do
-      1 -> :x
-      2 -> :o
-    end
-  end
+  defp pick_first(), do: pick_first(:rand.uniform(2))
+  defp pick_first(1), do: :x
+  defp pick_first(2), do: :o
 
 end

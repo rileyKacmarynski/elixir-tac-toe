@@ -2,16 +2,18 @@ defmodule TicTac.Worker do
 
   use GenServer, restart: :transient
 
+  alias TicTac.Game
+
   def start_link(opts) do
     {name, opts} = Keyword.pop(opts, :name)
     GenServer.start_link(__MODULE__, opts, name: name)
   end
 
   def init(opts) do
-    #initialize game state here
+    #initialize GenServer state here
+    players = Keyword.pop(opts, :players)
+    id = Keyword.pop(opts, :id)
 
-    state = %{}
-
-    {:ok, state}
+    {:ok, Game.new_game(id, players)}
   end
 end

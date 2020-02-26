@@ -10,10 +10,12 @@ defmodule TicTac do
   @doc """
   starts a new tic-tac-toe GenServer
   """
-  def start do
+  def start(p1, p2) do
+    id = UUID.uuid1()
     opts = [
-      id: :some_id,
-      name: via_tuple(:some_id)
+      id: id,
+      players: {p1, p2},
+      name: via_tuple(id)
     ]
 
     DynamicSupervisor.start_child(@supervisor, {TicTac.Worker, opts})

@@ -20,12 +20,10 @@ defmodule TicTac.BoardHelper do
     Enum.count(spaces, fn {x, y} -> ((x + y) / 2) == 2 end) == 3
   end
 
-  @doc """
-    When a player wins with a vertical or horizontal line
-    there will be 3 tuples with the same x or y value.
-    This function is used to count the number of tuples that share
-    x or y values and returns true if it finds 3.
-  """
+  # When a player wins with a vertical or horizontal line
+  # there will be 3 tuples with the same x or y value.
+  # This function is used to count the number of tuples that share
+  # x or y values and returns true if it finds 3.
   defp check_win(spaces, f) do
     for n <- 1..3 do
       Enum.count(spaces, fn t -> f.(t) == n end) == 3
