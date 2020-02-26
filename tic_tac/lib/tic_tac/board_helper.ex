@@ -3,9 +3,11 @@ defmodule TicTac.BoardHelper do
     Helper functions for working with the tic-tac-toe board.
   """
 
-  def fill_flat() do
-    fill()
-    |> Enum.flat_map(&(&1))
+  def fill() do
+    for x <- 1..3,
+        y <- 1..3 do
+          {x, y}
+    end
   end
 
   @doc """
@@ -29,13 +31,5 @@ defmodule TicTac.BoardHelper do
       Enum.count(spaces, fn t -> f.(t) == n end) == 3
     end
     |> Enum.any?(&(&1 == true))
-  end
-
-  defp fill() do
-    for x <- 1..3 do
-      for y <- 1..3 do
-        {x, y}
-      end
-    end
   end
 end

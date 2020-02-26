@@ -11,8 +11,8 @@ defmodule TicTac.Worker do
 
   def init(opts) do
     #initialize GenServer state here
-    players = Keyword.pop(opts, :players)
-    id = Keyword.pop(opts, :id)
+    players = Keyword.get(opts, :players)
+    id = Keyword.get(opts, :id)
 
     {:ok, Game.new_game(id, players)}
   end
