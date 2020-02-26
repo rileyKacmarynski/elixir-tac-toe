@@ -7,7 +7,7 @@ defmodule TicTac.Application do
 
   def start(_type, _args) do
     children = [
-      {Registry, keys: :unique, name: TicTac.Registry}
+      {Registry, keys: :unique, name: TicTac.Registry},
       {DynamicSupervisor, name: TicTac.WorkerSupervisor, strategy: :one_for_one}
     ]
 

@@ -3,8 +3,8 @@ defmodule TicTac.Worker do
   use GenServer, restart: :transient
 
   def start_link(opts) do
-    {name, opts} = Keyword.pops(opts, :name)
-    GenServer.start_link(__Module__, opts, name: name)
+    {name, opts} = Keyword.pop(opts, :name)
+    GenServer.start_link(__MODULE__, opts, name: name)
   end
 
   def init(opts) do

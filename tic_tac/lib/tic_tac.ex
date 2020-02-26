@@ -9,12 +9,6 @@ defmodule TicTac do
 
   @doc """
   starts a new tic-tac-toe GenServer
-
-  ## Examples
-
-      iex> TicTac.hello()
-      :world
-
   """
   def start do
     opts = [
