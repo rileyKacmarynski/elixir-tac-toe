@@ -5,7 +5,7 @@ defmodule TicTac.Game do
   defstruct(
     id: nil,
     turn: nil,
-    game_state: :start,
+    game_state: :playing,
     players: nil,
     winner: nil,
     board: %{
@@ -34,7 +34,9 @@ defmodule TicTac.Game do
   end
 
 
-
+  defp make_move(game = %{ game_state: state }, _move) when state in [:won, :tied] do
+    game
+  end
 
   defp make_move(game, move) do
     game
@@ -62,14 +64,16 @@ defmodule TicTac.Game do
 
   defp maybe_won(game = %{ players: players, turn: turn }, true) do
     Map.put(game, :winner, players[turn])
+    |> Map.put( :game_state, :won)
   end
 
-  # defp finish_turn(game, false) do
-  #   case MapSet.size(game.board.free) do
-  #     0 -> Map.put(game, :game_state, :tied)
-  #     _ -> game
-  #   end
-  # end
+
+  defp maybe_won(game, false) do
+    case MapSet.size(game.board.free) do
+      0 -> Map.put(game, :game_state, :tied)
+      _ -> game
+    end
+  end
 
   defp pick_first(), do: pick_first(:rand.uniform(2))
   defp pick_first(1), do: :x

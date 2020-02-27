@@ -1,6 +1,5 @@
 defmodule BoardHelperTest do
   use ExUnit.Case
-  doctest TicTac.BoardHelper
 
   alias TicTac.BoardHelper
 
