@@ -10,8 +10,8 @@ defmodule TicTac.Game do
     winner: nil,
     board: %{
       :free => BoardHelper.fill() |> MapSet.new,
+      :o => MapSet.new,
       :x => MapSet.new,
-      :o => MapSet.new
     }
   )
 
@@ -28,11 +28,26 @@ defmodule TicTac.Game do
 
   def make_move(game = %{ turn: turn, players: players }, player, move) do
     case Map.get(players, turn) do
-      ^player -> make_move(game, move)
+      ^player -> make_move(game, move) |> get_client_state
       _ -> {:error, :wrong_turn}
     end
   end
 
+  # The implementation of :board works great for handling game interactions in code,
+  # but it would be eaiser to send a 2D list representation back to the client where each
+  # index [x][y] has a value of :x, :o, or :free.
+  # the actual state will also be returned so our GenServer can keep a hold of that
+  def get_client_state(game) do
+    client_state = %{
+      :id => game.id,
+      :game_state => game.game_state,
+      :players => game.players,
+      :winner => game.winner,
+      :board => BoardHelper.fill_matrix(game.board)
+    }
+
+    {game, client_state}
+  end
 
   defp make_move(game = %{ game_state: state }, _move) when state in [:won, :tied] do
     game

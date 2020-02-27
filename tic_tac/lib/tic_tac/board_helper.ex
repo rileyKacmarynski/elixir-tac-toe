@@ -10,6 +10,18 @@ defmodule TicTac.BoardHelper do
     end
   end
 
+  def fill_matrix(%{ free: free, o: o, x: x }) do
+    for j <- 1..3 do
+      for k <- 1..3 do
+         cond do
+          MapSet.member?(free, {j, k}) == true -> :free
+          MapSet.member?(x, {j, k}) == true -> :x
+          MapSet.member?(o, {j, k}) == true -> :o
+         end
+      end
+    end
+  end
+
   @doc """
     A player's taken `spaces` are passed in as an array of tuples
     ex. [{1, 1}, {1, 2}, {1,3}, {3, 1}]
@@ -21,6 +33,7 @@ defmodule TicTac.BoardHelper do
     Enum.count(spaces, fn {x, y} -> x == y end) == 3 or
     Enum.count(spaces, fn {x, y} -> ((x + y) / 2) == 2 end) == 3
   end
+
 
   # When a player wins with a vertical or horizontal line
   # there will be 3 tuples with the same x or y value.
