@@ -15,11 +15,12 @@ defmodule TicTac.Worker do
     #initialize GenServer state here
     players = Keyword.get(opts, :players)
     id = Keyword.get(opts, :id)
-    # Maybe figure out some way to persist the previous state
-    # when something goes wrong. The current state might be why something happended
-    # in the first place
 
-    {:ok, Game.new_game(id, players), @timeout}
+    # we need to see if there's a game stored in the db and use that state
+    case Data.get_game(id) do
+      nil -> {:ok, Game.new_game(id, players), @timeout}
+      game -> {:ok, game, @timeout}
+    end
   end
 
   def handle_call({:make_move, player, move}, _from, game) do
@@ -45,10 +46,11 @@ defmodule TicTac.Worker do
 	end
 
   defp save_game(game) do
-    # persist game to disk
+    Map.from_struct(game)
+    |> Data.save_game
   end
 
-  defp delete_game(game) do
-    # game is over. Delete game
+  defp delete_game(%{game_id: game_id}) do
+    Data.delete_game(game_id)
   end
 end

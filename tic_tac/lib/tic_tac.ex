@@ -34,13 +34,16 @@ defmodule TicTac do
     |> call(:get_game)
   end
 
-  def lookup(id), do: Registry.lookup(@registry, id)
-
-  defp lookup_game(id) do
+  def lookup_game(id) do
     case Registry.lookup(@registry, id) do
       [{pid, _}] -> pid
       [] -> {:error, :not_found} # code to try to grab from db could go here.
     end
+  end
+
+  def kill_game(id) do
+    lookup_game(id)
+    |> Process.exit(:kill)
   end
 
   defp call({:error, :not_found}, _opts), do: IO.puts("Unable to find game.")

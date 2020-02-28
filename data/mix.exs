@@ -1,9 +1,9 @@
-defmodule TicTac.MixProject do
+defmodule Data.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :tic_tac,
+      app: :data,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
@@ -15,15 +15,16 @@ defmodule TicTac.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {TicTac.Application, []}
+      mod: {Data.Application, []}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-       { :elixir_uuid, "~> 1.2" },
-       { :data, [ path: "../data" ]},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:jason, "~> 1.0"}
     ]
   end
 end

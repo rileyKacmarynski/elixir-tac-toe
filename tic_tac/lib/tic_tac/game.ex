@@ -3,7 +3,7 @@ defmodule TicTac.Game do
   alias TicTac.BoardHelper
 
   defstruct(
-    id: nil,
+    game_id: nil,
     turn: nil,
     game_state: :playing,
     players: nil,
@@ -20,7 +20,7 @@ defmodule TicTac.Game do
   """
   def new_game(game_id, {p1_id, p2_id}) do
     %TicTac.Game{
-      id: game_id,
+      game_id: game_id,
       turn: pick_first(),
       players: %{ :x => p1_id, :o => p2_id }
     }
@@ -39,10 +39,11 @@ defmodule TicTac.Game do
   # the actual state will also be returned so our GenServer can keep a hold of that
   def get_client_state(game) do
     client_state = %{
-      :id => game.id,
+      :game_id => game.id,
       :game_state => game.game_state,
       :players => game.players,
       :winner => game.winner,
+      :turn => game.turn,
       :board => BoardHelper.fill_matrix(game.board)
     }
 
