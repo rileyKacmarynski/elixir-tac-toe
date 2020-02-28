@@ -25,8 +25,14 @@ defmodule TicTac.Worker do
   def handle_call({:make_move, player, move}, _from, game) do
     {game, client_state} = Game.make_move(game, player, move)
     # probably put code to persist game state here.
-
-    {:reply, client_state, game, @timeout}
+    case game.game_state do
+      :playing ->
+        save_game(game)
+        {:reply, client_state, game, @timeout}
+      state when state in [:won, :tied] ->
+        delete_game(game)
+        {:stop, :normal, client_state, game}
+    end
   end
 
   def handle_call(:get_game, _from, game) do
@@ -38,11 +44,11 @@ defmodule TicTac.Worker do
 		{:stop, :normal, []}
 	end
 
-  defp handle_persistence(game = %{game_state: :playing}) do
+  defp save_game(game) do
     # persist game to disk
   end
 
-  defp handle_persistence(game = %{game_state: state}) when state in [:won, :tied] do
+  defp delete_game(game) do
     # game is over. Delete game
   end
 end

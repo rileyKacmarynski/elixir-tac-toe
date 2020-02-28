@@ -43,7 +43,7 @@ defmodule TicTac do
     end
   end
 
-  defp call({:error, :not_found}, opts), do: IO.puts("Unable to find game.")
+  defp call({:error, :not_found}, _opts), do: IO.puts("Unable to find game.")
   defp call(pid, opts), do: GenServer.call(pid, opts)
 
   defp via_tuple(id), do: {:via, Registry, {@registry, id}}
