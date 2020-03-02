@@ -11,7 +11,7 @@ defmodule Data.Game do
     field :state, :map
   end
 
-  def save_game(game_state = %{game_id: id, }) do
+  def save_game(game_state = %{game_id: id }) do
     case Repo.get_by(Game, game_id: id) do
       nil -> %Game{}
       game -> game

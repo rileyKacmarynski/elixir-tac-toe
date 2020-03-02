@@ -39,7 +39,7 @@ defmodule TicTac.Game do
   # the actual state will also be returned so our GenServer can keep a hold of that
   def get_client_state(game) do
     client_state = %{
-      :game_id => game.id,
+      :game_id => game.game_id,
       :game_state => game.game_state,
       :players => game.players,
       :winner => game.winner,
