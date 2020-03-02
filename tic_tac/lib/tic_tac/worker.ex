@@ -18,7 +18,11 @@ defmodule TicTac.Worker do
 
     # we need to see if there's a game stored in the db and use that state
     case Data.get_game(id) do
-      nil -> {:ok, Game.new_game(id, players), @timeout}
+      nil -> (
+        game = Game.new_game(id, players)
+        save_game(game)
+        {:ok, game, @timeout}
+      )
       game -> {:ok, game, @timeout}
     end
   end

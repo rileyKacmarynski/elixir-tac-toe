@@ -13,7 +13,7 @@ defmodule Data.Game do
 
   def save_game(game_state = %{game_id: id }) do
     case Repo.get_by(Game, game_id: id) do
-      nil -> %Game{}
+      nil -> %Game{ :game_id => id, :state => game_state}
       game -> game
     end
     |> changeset(game_state)
@@ -31,6 +31,7 @@ defmodule Data.Game do
       game -> game
         |> Map.from_struct
         |> Map.get(:state)
+        |> Mapper.map_to_output()
     end
   end
 
@@ -39,4 +40,5 @@ defmodule Data.Game do
     |> Ecto.Changeset.cast(params, [:game_id, :state])
     |> Ecto.Changeset.validate_required([:game_id])
   end
+
 end

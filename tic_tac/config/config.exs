@@ -8,3 +8,4 @@ config :data, Data.Repo,
   pool_size: 10
 
   config :data, ecto_repos: [Data.Repo]
+
