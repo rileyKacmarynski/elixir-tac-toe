@@ -12,7 +12,10 @@ config :client_app, ClientAppWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "SE3Jw6qVAMuZP8UqEGeWcK1SNN9Ku31qHb8sc1cHFX7W9jWuocYLr37LD+Rhbmwy",
   render_errors: [view: ClientAppWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: ClientApp.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: ClientApp.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "RgkwrxZBprPAmii3cko6xj3piwvD2Nuv"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

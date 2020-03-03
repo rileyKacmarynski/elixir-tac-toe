@@ -23,6 +23,7 @@ defmodule ClientAppWeb do
 
       import Plug.Conn
       import ClientAppWeb.Gettext
+      import Phoenix.LiveView.Controller
       alias ClientAppWeb.Router.Helpers, as: Routes
     end
   end
@@ -41,6 +42,7 @@ defmodule ClientAppWeb do
 
       import ClientAppWeb.ErrorHelpers
       import ClientAppWeb.Gettext
+      import Phoenix.LiveView.Helpers
       alias ClientAppWeb.Router.Helpers, as: Routes
     end
   end
@@ -50,6 +52,7 @@ defmodule ClientAppWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
