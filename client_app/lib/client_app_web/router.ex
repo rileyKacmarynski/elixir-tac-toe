@@ -16,7 +16,7 @@ defmodule ClientAppWeb.Router do
   scope "/", ClientAppWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", LobbyLive
   end
 
   # Other scopes may use custom stacks.
