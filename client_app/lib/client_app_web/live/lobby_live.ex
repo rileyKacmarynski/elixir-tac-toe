@@ -1,11 +1,20 @@
 defmodule ClientAppWeb.LobbyLive do
   use Phoenix.LiveView
 
+  alias ClientAppWeb.Router.Helpers, as: Routes
+
   def mount(_params, _session, socket) do
 
-    socket = assign(socket, username: "bob")
+    # socket = assign(socket, username: "bob")
 
-    {:ok, socket}
+    case Map.fetch(socket.assigns, :username) do
+      {:ok, _username} -> {:ok, socket}
+      :error -> {
+        :ok,
+        push_redirect(socket, to: Routes.live_path(socket, ClientAppWeb.LoginLive))
+      }
+
+    end
   end
 
   def render(assigns) do
