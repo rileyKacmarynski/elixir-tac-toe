@@ -17,6 +17,7 @@ defmodule ClientAppWeb.Router do
     pipe_through :browser
 
     live "/", LobbyLive
+    live "/login", LoginLive
   end
 
   # Other scopes may use custom stacks.
