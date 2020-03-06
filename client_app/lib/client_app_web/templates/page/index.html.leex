@@ -1,3 +1,21 @@
-<h1>Hi!</h1>
+<h1>Players in lobby: <%= @lobby_size %> </h1>
 
-<button phx-click="inc">+</button>
+<div>
+
+</div>
+
+<ul class="list-group">
+
+    <%= for user <- @users do %>
+        <%= if user == @current_user do %>
+            <li class="list-group-item active">
+                <h4 class="text-"><%= user %></h4>
+            </li>
+        <% else %>
+            <li class="list-group-item">
+                <%= user %>
+                <button class="btn btn-primary" style="float: right;">Send Invitation</button>
+            </li>
+        <% end %>
+    <% end %>
+</ul>

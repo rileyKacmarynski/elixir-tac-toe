@@ -1,7 +1,9 @@
 <div class="input-group mb-3">
 
 <%= form_for @conn, Routes.page_path(@conn, :login), [as: :params], fn f -> %>
-  <%= text_input f, :username %>
-  <%= submit "Join" %>
+  <div class="form-group">
+    <%= text_input f, :username, [class: "form-control"] %>
+  </div>
+  <%= submit "Join", [class: "btn btn-primary"]%>
 <% end %>
 </div>
