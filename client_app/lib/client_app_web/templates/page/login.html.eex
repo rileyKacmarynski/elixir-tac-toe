@@ -1,0 +1,7 @@
+<div class="input-group mb-3">
+
+<%= form_for @conn, Routes.page_path(@conn, :login), [as: :params], fn f -> %>
+  <%= text_input f, :username %>
+  <%= submit "Join" %>
+<% end %>
+</div>

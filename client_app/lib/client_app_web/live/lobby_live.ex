@@ -3,17 +3,14 @@ defmodule ClientAppWeb.LobbyLive do
 
   alias ClientAppWeb.Router.Helpers, as: Routes
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
 
-    # socket = assign(socket, username: "bob")
-
-    case Map.fetch(socket.assigns, :username) do
-      {:ok, _username} -> {:ok, socket}
+    case Map.fetch(session, "current_user") do
+      {:ok, username} -> {:ok, assign(socket, current_user: username)}
       :error -> {
         :ok,
-        push_redirect(socket, to: Routes.live_path(socket, ClientAppWeb.LoginLive))
+        redirect(socket, to: Routes.page_path(socket, :login))
       }
-
     end
   end
 
