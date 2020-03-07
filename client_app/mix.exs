@@ -41,6 +41,7 @@ defmodule ClientApp.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_live_view, "~> 0.8.0"},
       {:floki, ">= 0.0.0", only: :test},
+      {:elixir_uuid, "~> 1.2"},
 
       {:tic_tac, [path: "../tic_tac"]}
     ]

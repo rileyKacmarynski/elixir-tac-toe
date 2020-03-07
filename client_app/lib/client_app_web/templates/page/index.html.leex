@@ -1,8 +1,5 @@
 <h1>Players in lobby: <%= @lobby_size %> </h1>
 
-<div>
-
-</div>
 
 <ul class="list-group">
 
@@ -14,7 +11,7 @@
         <% else %>
             <li class="list-group-item">
                 <%= user %>
-                <button class="btn btn-primary" style="float: right;">Send Invitation</button>
+                <button phx-click="invite" phx-value-user="<%= user %>" class="btn btn-primary" style="float: right;">Send Invitation</button>
             </li>
         <% end %>
     <% end %>
