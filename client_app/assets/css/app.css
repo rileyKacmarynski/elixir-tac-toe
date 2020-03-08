@@ -3,6 +3,53 @@
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
+
+
+.grid-container {
+  display: grid;
+  height: 300px;
+  width: 300px;
+  margin: 25px auto;
+  background: #1a1c23;
+  grid: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.box{
+  color: black;
+  font-size: 3em;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+
+.box:nth-child(1),
+.box:nth-child(2),
+.box:nth-child(3),
+.box:nth-child(4),
+.box:nth-child(5),
+.box:nth-child(6){
+  border-bottom: 5px solid black;
+}
+
+.box:nth-child(1),
+.box:nth-child(2),
+.box:nth-child(4),
+.box:nth-child(5),
+.box:nth-child(7),
+.box:nth-child(8){
+  border-right: 5px solid black;
+}
+
+.box.free{
+  cursor: pointer;
+}
+
+.box.taken{
+  cursor: default;
+}
+
 .modal-buttons>button{
   margin: 5px;
 }

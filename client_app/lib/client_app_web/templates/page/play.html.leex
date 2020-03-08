@@ -1,1 +1,30 @@
 <h1>Let's play the game!</h1>
+
+<div class="grid-container">
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box taken">X</div>
+    <div class="box free"></div>
+</div>
+
+
+<ul class="list-group">
+
+    <%= for user <- @users do %>
+        <%= if user == @current_user do %>
+            <li class="list-group-item active">
+                <h4 class="text-"><%= user %></h4>
+            </li>
+        <% else %>
+            <li class="list-group-item">
+                <%= user %>
+                <button phx-click="invite" phx-value-user="<%= user %>" class="btn btn-primary" style="float: right;">Send Invitation</button>
+            </li>
+        <% end %>
+    <% end %>
+</ul>
