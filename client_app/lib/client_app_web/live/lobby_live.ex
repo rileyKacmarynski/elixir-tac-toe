@@ -3,6 +3,7 @@ defmodule ClientAppWeb.LobbyLive do
 
   alias ClientAppWeb.Router.Helpers, as: Routes
   alias ClientAppWeb.Presence
+  alias ClientAppWeb.ModalLive
 
   @topic "lobby"
 
@@ -10,9 +11,13 @@ defmodule ClientAppWeb.LobbyLive do
 
     case Map.fetch(session, "current_user") do
       {:ok, username} -> {:ok,
-        socket
-        |> assign(current_user: username, users: [])
-        |> setup_presence()}
+      socket
+      |> assign(
+        current_user: username,
+        users: [],
+        show_modal: false,
+        invite_from: "")
+      |> setup_presence()}
       :error -> {
         :ok,
         redirect(socket, to: Routes.page_path(socket, :login))
@@ -20,13 +25,35 @@ defmodule ClientAppWeb.LobbyLive do
     end
   end
 
+
   def render(assigns) do
     Phoenix.View.render(ClientAppWeb.PageView, "index.html", assigns)
   end
 
+  def handle_params(params, uri, socket),
+    do: handle_params(params, uri, last_path_segment(uri), socket)
+
+  def handle_params(_params, _uri, nil, socket) do
+    {:noreply, assign(socket, show_modal: false)}
+  end
+
+  def handle_params(%{"from" => from} , _uri, "accept-invite",
+    %{assigns: %{show_modal: _}} = socket
+  ) do
+    {:noreply, assign(socket, show_modal: true, invite_from: from)}
+  end
+
+  def handle_params(_params, _uri, _last_path_segment, socket) do
+    {:noreply,
+      push_patch(socket,
+        to: Routes.live_path(socket, ClientAppWeb.LobbyLive),
+        replace: true
+      )}
+  end
+
   def handle_event("invite",
-    %{"user" => user},
-    %{assigns: %{current_user: current_user}} = socket
+  %{"user" => user},
+  %{assigns: %{current_user: current_user}} = socket
   ) do
     IO.puts("#{current_user} -> #{user}")
 
@@ -43,13 +70,12 @@ defmodule ClientAppWeb.LobbyLive do
       Presence.list(@topic)
       |> Enum.map(fn {username, _data} -> username end)
 
-    {:noreply,
-      assign(socket,
+      {:noreply, assign(
+        socket,
         lobby_size: lobby_size,
         users: users
       )}
   end
-
   # not sure if this is the right way to do it.
   # we want to only send invite to one person, but we have to
   # have a websocket connect with them to send the message in the first place
@@ -59,15 +85,45 @@ defmodule ClientAppWeb.LobbyLive do
   ) do
     case to do
       ^current_user ->
-        # pop up something so they can accept and do below with event
-        game_id = :rand.uniform(999999)
-        # IO.puts("#{current_user} -> #{from}")
-        broadcast_message!("accept_invite", %{ to: from, from: to, game_id: game_id})
-
+        # display invite modal
         {:noreply,
-          redirect(socket, to: Routes.live_path(socket, ClientAppWeb.PlayLive, game_id))}
+        push_patch(
+          socket,
+          to: Routes.accept_invite_live_path(socket, ClientAppWeb.LobbyLive, from),
+          replace: false
+        )}
       _ -> {:noreply, socket}
     end
+  end
+
+  def handle_info(
+      {ModalLive,
+      :button_clicked,
+      %{action: "play"}},
+      socket = %{ assigns: %{ current_user: current_user, invite_from: invite_from}}
+  ) do
+    # accept invite:  go to "play" liveview to begin game.
+    # broadcast message that other player will recieve and navigate to same game
+    game_id = :rand.uniform(999999)
+    broadcast_message!("accept_invite",
+      %{ to: invite_from, from: current_user, game_id: game_id})
+
+    {:noreply,
+      redirect(socket, to: Routes.live_path(socket, ClientAppWeb.PlayLive, game_id))}
+  end
+
+  def handle_info(
+    {ModalLive,
+    :button_clicked,
+    %{action: "decline"}},
+    socket
+  ) do
+     # don't want to play. not informing the guy who sent the invite, just ignoring
+    {:noreply,
+      push_patch(socket,
+        to: Routes.live_path(socket, ClientAppWeb.LobbyLive),
+        replace: true
+      )}
   end
 
   def handle_info(
@@ -76,6 +132,8 @@ defmodule ClientAppWeb.LobbyLive do
   ) do
     case to do
       ^current_user ->
+        # get notified our invite has been accepted. Redirect to game that
+        # invitee has setup
         {:noreply,
           redirect(socket, to: Routes.live_path(socket, ClientAppWeb.PlayLive, game_id))}
       _ -> {:noreply, socket}
@@ -105,4 +163,13 @@ defmodule ClientAppWeb.LobbyLive do
       payload
     )
   end
+
+  defp last_path_segment(uri) do
+    uri
+    |> URI.parse()
+    |> Map.get(:path)
+    |> String.split("/", trim: true)
+    |> List.first()
+  end
+
 end

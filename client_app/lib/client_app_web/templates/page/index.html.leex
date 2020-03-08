@@ -16,3 +16,17 @@
         <% end %>
     <% end %>
 </ul>
+
+<%= if @show_modal do %>
+    <%= live_component(@socket,
+                        ClientAppWeb.ModalLive,
+                        id: "accept-invite",
+                        title: "Game invite",
+                        body: "Begin game with #{@invite_from}?",
+                        right_button: "Accept",
+                        right_button_action: "play",
+                        right_button_param: @current_user,
+                        left_button: "Decline",
+                        left_button_action: "decline")
+    %>
+<% end %>
