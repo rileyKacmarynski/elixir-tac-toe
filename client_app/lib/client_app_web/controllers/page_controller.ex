@@ -1,16 +1,11 @@
 defmodule ClientAppWeb.PageController do
   use ClientAppWeb, :controller
 
-  def index(conn, _params) do
-    render(conn, "index.html")
-  end
-
   def login(conn, _params) do
     render(conn, "login.html")
   end
 
   def join(conn, %{ "params" => %{"username" => username}}) do
-
     case String.match?(username, ~r/^[[:alnum:]]+$/) do
       true ->
         conn
@@ -21,7 +16,5 @@ defmodule ClientAppWeb.PageController do
         |> put_flash(:error, "Username must be alphanumeric.")
         |> render("login.html")
     end
-
-
   end
 end

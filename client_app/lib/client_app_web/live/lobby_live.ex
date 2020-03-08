@@ -61,12 +61,11 @@ defmodule ClientAppWeb.LobbyLive do
       ^current_user ->
         # pop up something so they can accept and do below with event
         game_id = :rand.uniform(999999)
-        IO.puts("#{current_user} -> #{from}")
+        # IO.puts("#{current_user} -> #{from}")
         broadcast_message!("accept_invite", %{ to: from, from: to, game_id: game_id})
 
-        IO.puts("going to play game: #{game_id}")
-        {:noreply, socket}
-          # redirect(socket, to: Routes.page_path(socket, :game, game_id))}
+        {:noreply,
+          redirect(socket, to: Routes.live_path(socket, ClientAppWeb.PlayLive, game_id))}
       _ -> {:noreply, socket}
     end
   end
@@ -77,10 +76,8 @@ defmodule ClientAppWeb.LobbyLive do
   ) do
     case to do
       ^current_user ->
-        IO.puts("going to play game: #{game_id}")
-        # {:noreply,
-          # redirect(socket, to: Routes.page_path(socket, :game, game_id))}
-        {:noreply, socket}
+        {:noreply,
+          redirect(socket, to: Routes.live_path(socket, ClientAppWeb.PlayLive, game_id))}
       _ -> {:noreply, socket}
     end
   end

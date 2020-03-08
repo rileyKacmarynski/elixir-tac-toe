@@ -17,6 +17,7 @@ defmodule ClientAppWeb.Router do
     pipe_through :browser
 
     live "/", LobbyLive
+    live "/play/:game", PlayLive
     get "/login", PageController, :login
     post "/login", PageController, :join
   end
