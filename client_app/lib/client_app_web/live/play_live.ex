@@ -12,10 +12,6 @@ defmodule ClientAppWeb.PlayLive do
     |> assign(game_id: game_id, users: [])
     |> setup_presence()
 
-    # we are going to have to check to see if the game with that id has been started
-    # if it has we can get the game, if it hasn't we'll start it and get the game.
-    # This will ensure only one user start the game
-
     {:ok, socket }
   end
 
@@ -47,11 +43,11 @@ defmodule ClientAppWeb.PlayLive do
       Presence.list(topic)
       |> Enum.map(fn {username, _data} -> username end)
 
-      # if both players have joined, start the game.
-
-      # IO.puts("diff called for user #{socket.assigns.current_user}")
-      # IO.inspect(users)
-      # IO.inspect(joins)
+      # we should be able to send(self, ...) to send this process a message.
+      # we can catch that message in a handle_info callback like we did with the
+      # modal in the Lobby liveview.
+      # that handle_info callback will have the socket. We'll have the users
+      # there and can get/create (we'll have both players and an id. )
 
       {:noreply, assign(socket, users: users )}
   end
