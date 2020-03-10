@@ -37,18 +37,29 @@ defmodule ClientAppWeb.PlayLive do
 
   def handle_info(
     %{event: "presence_diff", payload: %{joins: joins, leaves: leaves}},
-    %{assigns: %{topic: topic}} = socket
+    %{assigns: %{topic: topic, game_id: id}} = socket
   ) do
     users =
       Presence.list(topic)
       |> Enum.map(fn {username, _data} -> username end)
 
-      # we should be able to send(self, ...) to send this process a message.
-      # we can catch that message in a handle_info callback like we did with the
-      # modal in the Lobby liveview.
-      # that handle_info callback will have the socket. We'll have the users
-      # there and can get/create (we'll have both players and an id. )
+    socket =
+      assign(users: users)
+      |> maybe_start_game()
 
-      {:noreply, assign(socket, users: users )}
+      IO.inspect(socket.assigns)
+      {:noreply, socket}
+  end
+
+  defp maybe_start_game(
+    %{assigns: %{game_id: id, users: users}} = socket
+  ) do
+      # if we have two users, begin/get game
+      if Enum.count(users) == 2 do
+        [p1 | [p2 | tail]] = users
+        assign(socket, game: TicTac.start(id, p1, p2))
+      else
+        socket
+      end
   end
 end

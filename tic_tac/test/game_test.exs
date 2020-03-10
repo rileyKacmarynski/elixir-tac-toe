@@ -4,14 +4,14 @@ defmodule GameTest do
   alias TicTac.Game
 
   test "game starts" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
 
     assert game.game_state == :playing
     assert map_size(game.players) == 2
   end
 
   test "game state isn't change when game is over" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :game_state, :tied)
     game = Map.put(game, :turn, :x)
 
@@ -19,14 +19,14 @@ defmodule GameTest do
   end
 
   test "player goes out of turn" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :turn, :x)
 
     assert {:error, :wrong_turn} = Game.make_move(game, "p2", {1, 1})
   end
 
   test "player plays in free spot" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :turn, :x)
 
     {game, _} = Game.make_move(game, "p1", {1, 1})
@@ -36,7 +36,7 @@ defmodule GameTest do
   end
 
   test "game switches turn" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :turn, :x)
 
     {game, _} = Game.make_move(game, "p1", {1, 1})
@@ -45,7 +45,7 @@ defmodule GameTest do
   end
 
   test "player wins game" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :turn, :x)
 
     #it might be easier to just change the maps, but let's play out a full game
@@ -60,7 +60,7 @@ defmodule GameTest do
   end
 
   test "tie game" do
-    {game, _} = Game.new_game("123", {"p1", "p2"})
+    game = Game.new_game("123", {"p1", "p2"})
     game = Map.put(game, :turn, :x)
 
     # make the game look like this

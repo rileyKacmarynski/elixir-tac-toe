@@ -8,10 +8,17 @@ defmodule TicTac do
   """
 
   @doc """
-  starts a new tic-tac-toe GenServer
+    checks to see if a game with the given id exists.
+    If it does, return that one, otherwise start a new game
   """
-  def start(p1, p2) do
-    id = UUID.uuid1()
+  def start(id, p1, p2) do
+    case lookup_game(id) do
+      {:error, :not_found} -> create(id, p1, p2)
+      pid -> call(pid, :get_game)
+    end
+  end
+
+  defp create(id, p1, p2) do
     opts = [
       id: id,
       players: {p1, p2},
