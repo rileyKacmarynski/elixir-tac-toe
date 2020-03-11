@@ -3,8 +3,8 @@
     <div class="container">
         <%= case @game.game_state do %>
             <%= :tied -> %> <h2>Tie game</h2>
-            <%= :won -> %>  <h2><%= @game.winner %> won</h2>
-            <%= _ -> %>     <h2>Turn: <%= @game.turn %> </h2>
+            <% :won -> %>  <h2><%= @game.winner %> won</h2>
+            <% _ -> %>     <h2>Turn: <%= @game.turn %> </h2>
         <% end %>
     </div>
     <div class="grid-container">

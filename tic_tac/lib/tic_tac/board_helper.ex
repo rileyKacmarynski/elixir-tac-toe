@@ -14,9 +14,9 @@ defmodule TicTac.BoardHelper do
     for j <- 1..3,
         k <- 1..3 do
          cond do
-          MapSet.member?(free, {j, k}) == true -> :free
-          MapSet.member?(x, {j, k}) == true -> :x
-          MapSet.member?(o, {j, k}) == true -> :o
+          MapSet.member?(free, {k, j}) == true -> :free
+          MapSet.member?(x, {k, j}) == true -> :x
+          MapSet.member?(o, {k, j}) == true -> :o
       end
     end
   end

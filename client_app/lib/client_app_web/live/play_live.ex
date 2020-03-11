@@ -21,32 +21,48 @@ defmodule ClientAppWeb.PlayLive do
 
   def handle_event("play",
   %{"spot" => spot},
-  %{assigns: %{current_user: current_user, game: game}} = socket
+  %{assigns: %{current_user: current_user, game: game, topic: topic}} = socket
   ) do
-
     case Map.get(game.players, game.turn) do
       ^current_user ->
-        socket = socket
-          |> play_turn(current_user, game.game_id, get_coord(spot))
-          IO.inspect(socket.assigns)
-          # broadcast here
-          {:noreply, socket}
+        new_game = play_turn(game.game_id, current_user, get_coord(spot))
+        IO.puts("new_game")
+        IO.inspect(new_game)
+        ClientAppWeb.Endpoint.broadcast_from!(
+          self(),
+          topic,
+          "finished_turn",
+          %{game: new_game}
+        )
+
+        {:noreply, assign(socket, game: new_game)}
       _ ->
         IO.puts("not your turn")
         {:noreply, socket}
     end
-
-    # ClientAppWeb.Endpoint.broadcast_from!(
-    #   self(),
-    #   @topic,
-    #   event,
-    #   payload
-    # )
-
   end
 
-  defp play_turn(socket, current_user, game_id, spot) do
-    assign(socket, game: TicTac.make_move(game_id, current_user, spot))
+  def handle_info(%{event: "finished_turn", payload: %{game: game}}, socket) do
+    {:noreply, assign(socket, game: game)}
+  end
+
+  def handle_info(
+    %{event: "presence_diff"},
+    %{assigns: %{topic: topic, game_id: id}} = socket
+  ) do
+    users =
+      Presence.list(topic)
+      |> Enum.map(fn {username, _data} -> username end)
+
+    socket = socket
+      |> assign(users: users)
+      |> maybe_start_game()
+
+      {:noreply, socket}
+  end
+
+  defp play_turn(game_id, current_user, spot) do
+   TicTac.make_move(game_id, current_user, spot)
   end
 
   defp setup_presence(
@@ -63,21 +79,6 @@ defmodule ClientAppWeb.PlayLive do
     )
 
     assign(socket, topic: topic)
-  end
-
-  def handle_info(
-    %{event: "presence_diff"},
-    %{assigns: %{topic: topic, game_id: id}} = socket
-  ) do
-    users =
-      Presence.list(topic)
-      |> Enum.map(fn {username, _data} -> username end)
-
-    socket = socket
-      |> assign(users: users)
-      |> maybe_start_game()
-
-      {:noreply, socket}
   end
 
   defp maybe_start_game(
