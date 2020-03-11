@@ -26,6 +26,17 @@ defmodule TicTac.Game do
     }
   end
 
+  def map_game(game) do
+    %TicTac.Game{
+      game_id: game.game_id,
+      turn: game.turn,
+      game_state: game.game_state,
+      players: game.players,
+      winner: game.winner,
+      board: game.board
+    }
+  end
+
   def make_move(game = %{ turn: turn, players: players }, player, move) do
     case Map.get(players, turn) do
       ^player -> make_move(game, move) |> get_client_state

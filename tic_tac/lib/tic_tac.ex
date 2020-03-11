@@ -12,9 +12,10 @@ defmodule TicTac do
     If it does, return that one, otherwise start a new game
   """
   def start(id, p1, p2) do
-    case lookup_game(id) do
-      {:error, :not_found} -> create(id, p1, p2)
-      pid -> call(pid, :get_game)
+
+    case create(id, p1, p2) do
+      {:ok, pid} -> call(pid, :get_game)
+      {:error, {:already_started, pid}} -> call(pid, :get_game)
     end
   end
 
@@ -26,7 +27,6 @@ defmodule TicTac do
     ]
 
     DynamicSupervisor.start_child(@supervisor, {TicTac.Worker, opts})
-    {:ok, id}
   end
 
   def make_move(game_id, player, move) do

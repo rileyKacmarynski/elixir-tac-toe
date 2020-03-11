@@ -1,30 +1,30 @@
-<h1>Let's play the game!</h1>
 
-<div class="grid-container">
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box taken">X</div>
-    <div class="box free"></div>
-</div>
-
-
-<ul class="list-group">
-
-    <%= for user <- @users do %>
-        <%= if user == @current_user do %>
-            <li class="list-group-item active">
-                <h4 class="text-"><%= user %></h4>
-            </li>
-        <% else %>
-            <li class="list-group-item">
-                <%= user %>
-                <button phx-click="invite" phx-value-user="<%= user %>" class="btn btn-primary" style="float: right;">Send Invitation</button>
-            </li>
+<%= if assigns[:game] do %>
+    <div class="container">
+        <%= case @game.game_state do %>
+            <%= :tied -> %> <h2>Tie game</h2>
+            <%= :won -> %>  <h2><%= @game.winner %> won</h2>
+            <%= _ -> %>     <h2>Turn: <%= @game.turn %> </h2>
         <% end %>
-    <% end %>
-</ul>
+    </div>
+    <div class="grid-container">
+        <%= for {spot, i} <- @game.board |> Enum.with_index do %>
+            <%= case spot do %>
+                <% :free -> %>  <div phx-click="play" phx-value-spot="<%= i + 1 %>" class="box free item-<%= i + 1 %>"></div>
+                <% :x -> %>     <div phx-click="play" phx-value-spot="<%= i + 1 %>" class="box taken item-<%= i + 1 %>">X</div>
+                <% :o -> %>     <div phx-click="play" phx-value-spot="<%= i + 1 %>" class="box taken item-<%= i + 1 %>">O</div>
+            <% end %>
+        <% end %>
+    </div>
+    <div class="container">
+        <ul class="list-group">
+            <%= for {letter, player} <- @game.players do %>
+                <li class="list-group-item">
+                    <h4 class="text"><%= letter %> - <%= player %></h4>
+                </li>
+            <% end %>
+        </ul>
+    </div>
+<% end %>
+
+

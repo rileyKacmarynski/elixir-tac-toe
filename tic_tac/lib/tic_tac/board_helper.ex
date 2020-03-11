@@ -11,13 +11,12 @@ defmodule TicTac.BoardHelper do
   end
 
   def fill_matrix(%{ free: free, o: o, x: x }) do
-    for j <- 1..3 do
-      for k <- 1..3 do
+    for j <- 1..3,
+        k <- 1..3 do
          cond do
           MapSet.member?(free, {j, k}) == true -> :free
           MapSet.member?(x, {j, k}) == true -> :x
           MapSet.member?(o, {j, k}) == true -> :o
-         end
       end
     end
   end

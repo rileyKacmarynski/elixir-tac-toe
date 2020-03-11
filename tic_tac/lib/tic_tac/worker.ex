@@ -23,12 +23,13 @@ defmodule TicTac.Worker do
         save_game(game)
         {:ok, game, @timeout}
       )
-      game -> {:ok, game, @timeout}
+      game -> {:ok, Game.map_game(game), @timeout}
     end
   end
 
   def handle_call({:make_move, player, move}, _from, game) do
     {game, client_state} = Game.make_move(game, player, move)
+    IO.inspect(game)
     # probably put code to persist game state here.
     case game.game_state do
       :playing ->

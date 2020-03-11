@@ -3,14 +3,18 @@
 @import "./phoenix.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
-
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+}
 
 .grid-container {
   display: grid;
   height: 300px;
   width: 300px;
   margin: 25px auto;
-  background: #1a1c23;
   grid: repeat(3, 1fr) / repeat(3, 1fr);
 }
 
@@ -30,7 +34,7 @@
 .box:nth-child(4),
 .box:nth-child(5),
 .box:nth-child(6){
-  border-bottom: 5px solid black;
+  border-top: 5px solid black;
 }
 
 .box:nth-child(1),
@@ -41,6 +45,52 @@
 .box:nth-child(8){
   border-right: 5px solid black;
 }
+
+.box.item-1 {
+  grid-column-start: 1; 
+  grid-row-start: 3;
+}
+
+.box.item-2 {
+  grid-column-start: 2; 
+  grid-row-start: 3;
+}
+
+.box.item-3 {
+  grid-column-start: 3; 
+  grid-row-start: 3;
+}
+
+.box.item-4 {
+  grid-column-start: 1; 
+  grid-row-start: 2;
+}
+
+.box.item-5 {
+  grid-column-start: 2; 
+  grid-row-start: 2;
+}
+
+.box.item-6 {
+  grid-column-start: 3; 
+  grid-row-start: 2;
+}
+
+.box.item-7 {
+  grid-column-start: 1; 
+  grid-row-start: 1;
+}
+
+.box.item-8 {
+  grid-column-start: 2; 
+  grid-row-start: 1;
+}
+
+.box.item-9 {
+  grid-column-start: 3; 
+  grid-row-start: 1;
+}
+
 
 .box.free{
   cursor: pointer;
