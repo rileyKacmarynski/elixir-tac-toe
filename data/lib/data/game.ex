@@ -16,7 +16,7 @@ defmodule Data.Game do
       nil -> %Game{ :game_id => id, :state => game_state}
       game -> game
     end
-    |> changeset(game_state)
+    |> changeset(%{state: game_state})
     |> Repo.insert_or_update
   end
 
@@ -36,6 +36,9 @@ defmodule Data.Game do
   end
 
   defp changeset(game, params) do
+    IO.puts("changeset")
+    IO.inspect(game)
+    IO.inspect(params)
     game
     |> Ecto.Changeset.cast(params, [:game_id, :state])
     |> Ecto.Changeset.validate_required([:game_id])

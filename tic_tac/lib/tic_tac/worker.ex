@@ -19,6 +19,7 @@ defmodule TicTac.Worker do
     # we need to see if there's a game stored in the db and use that state
     case Data.get_game(id) do
       nil -> (
+        IO.puts("unable to find existing game.")
         game = Game.new_game(id, players)
         save_game(game)
         {:ok, game, @timeout}
@@ -29,10 +30,10 @@ defmodule TicTac.Worker do
 
   def handle_call({:make_move, player, move}, _from, game) do
     {game, client_state} = Game.make_move(game, player, move)
-    IO.inspect(game)
     # probably put code to persist game state here.
     case game.game_state do
       :playing ->
+        IO.puts("saving game...")
         save_game(game)
         {:reply, client_state, game, @timeout}
       state when state in [:won, :tied] ->
